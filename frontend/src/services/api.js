@@ -10,6 +10,7 @@ const api = axios.create({
   }
 })
 
+console.log('process.env.VUE_APP_ROOT_API:' + process.env.VUE_APP_ROOT_API)
 // 共通前処理
 api.interceptors.request.use(function (config) {
   // メッセージをクリア
@@ -45,6 +46,7 @@ api.interceptors.response.use(function (response) {
     if (token != null) {
       message = 'ログイン有効期限切れ'
     } else {
+      console.log('token: '+token)
       message = '認証エラー'
     }
     store.dispatch('auth/logout')
@@ -53,6 +55,11 @@ api.interceptors.response.use(function (response) {
   } else if (status === 403) {
     // 権限エラー
     message = '権限エラーです。'
+    store.dispatch('message/setErrorMessage', { message: message })
+
+  } else if (status === 404) {
+    // その他のエラー
+    message = '404エラーです。'
     store.dispatch('message/setErrorMessage', { message: message })
 
   } else {
