@@ -41,13 +41,15 @@ api.interceptors.response.use(function (response) {
     store.dispatch('message/setWarningMessages', { messages: messages })
 
   } else if (status === 401) {
-    // 認証エラー
+    // 認証エラー　
+
+    // getItem() method allows you to access the data stored in the browser's localStorage objec
     const token = localStorage.getItem('access')
     if (token != null) {
       message = 'ログイン有効期限切れ'
     } else {
       console.log('token: '+token)
-      message = '認証エラー'
+      message = 'Token == null: 401認証エラー'
     }
     store.dispatch('auth/logout')
     store.dispatch('message/setErrorMessage', { message: message })
